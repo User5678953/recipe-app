@@ -5,7 +5,11 @@ export const fetchRecipes = async (exclusions) => {
   try {
     const response = await fetch(`${API_URL}?i=${exclusions.join(',')}`);
     if (!response.ok) {
-      throw new Error('Network response was not ok');
+      if (response.status === 429) {
+        throw new Error('API limit reached. Please try again later.');
+      } else {
+        throw new Error('Network response was not ok');
+      }
     }
     const data = await response.json();
     return data.meals;
