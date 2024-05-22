@@ -2,7 +2,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import SignIn from './components/SignIn';
-import SignUp from './components/SignUp';
+import SignUp from './components/SignIn';
 import Login from './components/Login';
 import UserPreferences from './components/UserPreferences';
 import AuthProvider from './components/AuthProvider';
