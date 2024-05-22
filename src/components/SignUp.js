@@ -1,45 +1,39 @@
-// src/components/SignUp.js
-import React, { useState } from 'react';
-import { auth } from '../firebase';
+import React, { useEffect } from 'react';
+import { getAuth, GoogleAuthProvider, EmailAuthProvider } from 'firebase/auth';
+import { ui } from '../firebase';
 
-const SignUp = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+const SignIn = () => {
+  useEffect(() => {
+    const auth = getAuth();
+    const uiConfig = {
+      signInOptions: [
+        EmailAuthProvider.PROVIDER_ID,
+        GoogleAuthProvider.PROVIDER_ID
+      ],
+      signInSuccessUrl: '/',
+    };
+    ui.start('#firebaseui-auth-container', uiConfig);
+  }, []);
 
-  const handleSignUp = async (e) => {
-    e.preventDefault();
-    try {
-      await auth.createUserWithEmailAndPassword(email, password);
-      alert('User created successfully');
-    } catch (error) {
-      console.error('Error signing up: ', error);
-      alert(error.message);
-    }
+  const handleGoogleSignIn = () => {
+    const auth = getAuth();
+    const provider = new GoogleAuthProvider();
+    auth.signInWithPopup(provider)
+      .then(() => {
+        alert('Signed in successfully with Google');
+      }).catch((error) => {
+        console.error('Google sign-in error:', error);
+      });
   };
 
   return (
-    <form onSubmit={handleSignUp}>
-      <div>
-        <label>Email:</label>
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Email"
-        />
-      </div>
-      <div>
-        <label>Password:</label>
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Password"
-        />
-      </div>
-      <button type="submit">Sign Up</button>
-    </form>
+    <div>
+      <h2>Sign In</h2>
+      <div id="firebaseui-auth-container"></div>
+      <button onClick={handleGoogleSignIn}>Sign in with Google</button>
+    </div>
   );
 };
 
-export default SignUp;
+export default SignIn;
+

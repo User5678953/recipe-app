@@ -1,3 +1,4 @@
+// src/components/SignIn.js
 import React, { useState } from 'react';
 import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider } from 'firebase/auth';
 
@@ -6,7 +7,7 @@ const SignIn = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
 
-  const handleSignInWithEmail = async (e) => {
+  const handleSignIn = async (e) => {
     e.preventDefault();
     const auth = getAuth();
     try {
@@ -21,8 +22,8 @@ const SignIn = () => {
     const auth = getAuth();
     const provider = new GoogleAuthProvider();
     auth.signInWithPopup(provider)
-      .then(() => {
-        alert('Signed in successfully with Google');
+      .then((result) => {
+        alert('Signed in successfully');
       }).catch((error) => {
         setError(error.message);
       });
@@ -32,7 +33,7 @@ const SignIn = () => {
     <div>
       <h2>Sign In</h2>
       {error && <p style={{ color: 'red' }}>{error}</p>}
-      <form onSubmit={handleSignInWithEmail}>
+      <form onSubmit={handleSignIn}>
         <div>
           <label>Email:</label>
           <input
