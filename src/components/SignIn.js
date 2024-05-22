@@ -6,8 +6,8 @@ const SignIn = () => {
   useEffect(() => {
     const uiConfig = {
       signInOptions: [
-        'password', // Ensure this matches the provider you use, e.g., 'password' for Email/Password
-        'google.com' // Ensure this matches the provider you use, e.g., 'google.com' for Google Sign-In
+        'password', // Ensure this matches the provider you use
+        'google.com' // Ensure this matches the provider you use
       ],
       signInSuccessUrl: '/',
     };
