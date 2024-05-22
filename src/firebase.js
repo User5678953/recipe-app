@@ -1,7 +1,7 @@
 // src/firebase.js
-import firebase from 'firebase/app';
-import 'firebase/auth';
-import 'firebase/firestore';
+import { initializeApp } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore';
 import firebaseui from 'firebaseui';
 
 const firebaseConfig = {
@@ -13,9 +13,9 @@ const firebaseConfig = {
   appId: "1:257495899822:web:ae69f8aebb7f2f2a5f7a6e"
 };
 
-firebase.initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
 
-export const auth = firebase.auth();
-export const firestore = firebase.firestore();
+export const auth = getAuth(app);
+export const firestore = getFirestore(app);
 
 export const ui = new firebaseui.auth.AuthUI(auth);
