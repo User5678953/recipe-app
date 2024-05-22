@@ -1,14 +1,13 @@
 // src/components/SignIn.js
 import React, { useEffect } from 'react';
-import firebase from 'firebase/app';
 import { ui } from '../firebase';
 
 const SignIn = () => {
   useEffect(() => {
     const uiConfig = {
       signInOptions: [
-        firebase.auth.EmailAuthProvider.PROVIDER_ID,
-        firebase.auth.GoogleAuthProvider.PROVIDER_ID
+        'password', // Ensure this matches the provider you use, e.g., 'password' for Email/Password
+        'google.com' // Ensure this matches the provider you use, e.g., 'google.com' for Google Sign-In
       ],
       signInSuccessUrl: '/',
     };
