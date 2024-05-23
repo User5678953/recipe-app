@@ -1,6 +1,7 @@
-// src/components/RecipeList.js
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { fetchRecipes } from '../recipeService';
+import { toast } from 'react-toastify';
 
 const RecipeList = ({ exclusions }) => {
   const [recipes, setRecipes] = useState([]);
@@ -26,11 +27,13 @@ const RecipeList = ({ exclusions }) => {
   if (error) return <p>Error: {error}</p>;
 
   return (
-    <div>
+    <div className="recipe-list">
       <h2>Recipes</h2>
       <ul>
         {recipes.map((recipe) => (
-          <li key={recipe.idMeal}>{recipe.strMeal}</li>
+          <li key={recipe.idMeal}>
+            <Link to={`/recipe/${recipe.idMeal}`}>{recipe.strMeal}</Link>
+          </li>
         ))}
       </ul>
     </div>

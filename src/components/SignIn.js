@@ -1,38 +1,48 @@
+// src/components/SignIn.js
 import React, { useState } from 'react';
-import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider } from 'firebase/auth';
+import { useNavigate } from 'react-router-dom';
+import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { toast } from 'react-toastify';
 
 const SignIn = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   const handleSignInWithEmail = async (e) => {
     e.preventDefault();
     const auth = getAuth();
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      alert('Signed in successfully');
+      toast.success('Signed in successfully');
+      navigate('/dashboard');
     } catch (error) {
       setError(error.message);
+      toast.error(error.message);
     }
   };
 
-  const handleGoogleSignIn = () => {
+  const handleGoogleSignIn = async () => {
     const auth = getAuth();
     const provider = new GoogleAuthProvider();
-    auth.signInWithPopup(provider)
-      .then(() => {
-        alert('Signed in successfully with Google');
-      }).catch((error) => {
-        setError(error.message);
-      });
+    try {
+      const result = await signInWithPopup(auth, provider);
+      console.log('Google sign-in result:', result);
+      toast.success('Signed in successfully with Google');
+      navigate('/dashboard');
+    } catch (error) {
+      console.error('Google sign-in error:', error);
+      setError(error.message);
+      toast.error(error.message);
+    }
   };
 
   return (
-    <div>
-      <h2>Sign In</h2>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+    <div className="form-container">
       <form onSubmit={handleSignInWithEmail}>
+        <h2>Sign In</h2>
+        {error && <p style={{ color: 'red' }}>{error}</p>}
         <div>
           <label>Email:</label>
           <input
@@ -51,9 +61,11 @@ const SignIn = () => {
             placeholder="Password"
           />
         </div>
-        <button type="submit">Sign In</button>
+        <div className="button-container">
+          <button type="submit">Sign In</button>
+          <button type="button" onClick={handleGoogleSignIn}>Use Google</button>
+        </div>
       </form>
-      <button onClick={handleGoogleSignIn}>Sign in with Google</button>
     </div>
   );
 };

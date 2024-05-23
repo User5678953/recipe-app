@@ -37,7 +37,7 @@ const UserPreferences = () => {
   };
 
   return (
-    <div>
+    <div className="form-container">
       <form onSubmit={handleSubmit}>
         <div>
           <label>

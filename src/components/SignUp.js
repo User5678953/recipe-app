@@ -1,39 +1,55 @@
-import React, { useEffect } from 'react';
-import { getAuth, GoogleAuthProvider, EmailAuthProvider } from 'firebase/auth';
-import { ui } from '../firebase';
+// src/components/SignUp.js
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+import { toast } from 'react-toastify';
 
-const SignIn = () => {
-  useEffect(() => {
-    const auth = getAuth();
-    const uiConfig = {
-      signInOptions: [
-        EmailAuthProvider.PROVIDER_ID,
-        GoogleAuthProvider.PROVIDER_ID
-      ],
-      signInSuccessUrl: '/',
-    };
-    ui.start('#firebaseui-auth-container', uiConfig);
-  }, []);
+const SignUp = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
-  const handleGoogleSignIn = () => {
+  const handleSignUp = async (e) => {
+    e.preventDefault();
     const auth = getAuth();
-    const provider = new GoogleAuthProvider();
-    auth.signInWithPopup(provider)
-      .then(() => {
-        alert('Signed in successfully with Google');
-      }).catch((error) => {
-        console.error('Google sign-in error:', error);
-      });
+    try {
+      await createUserWithEmailAndPassword(auth, email, password);
+      toast.success('User created successfully');
+      navigate('/getting-started');
+    } catch (error) {
+      setError(error.message);
+      toast.error(error.message);
+    }
   };
 
   return (
-    <div>
-      <h2>Sign In</h2>
-      <div id="firebaseui-auth-container"></div>
-      <button onClick={handleGoogleSignIn}>Sign in with Google</button>
+    <div className="form-container">
+      <form onSubmit={handleSignUp}>
+        <h2>Create an Account</h2>
+        {error && <p style={{ color: 'red' }}>{error}</p>}
+        <div>
+          <label>Email:</label>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Email"
+          />
+        </div>
+        <div>
+          <label>Password:</label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Password"
+          />
+        </div>
+        <button type="submit">Sign Up</button>
+      </form>
     </div>
   );
 };
 
-export default SignIn;
-
+export default SignUp;
